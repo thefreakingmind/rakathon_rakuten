@@ -1,10 +1,7 @@
 spring:
   data:
     mongodb:
-      username: sal123
-      database: salvesthackathonmongodb
-      password: sal
-      port: '27017'
-      host: localhost
+      uri: mongodb+srv://thefreakingsal:rakathoniscool@rakathon.ckbgep9.mongodb.net/salvestDB?retryWrites=true&w=majority
+
 server:
   port: '8099'

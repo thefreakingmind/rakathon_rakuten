@@ -1,41 +1,32 @@
 package com.api.salvest.model;
 
-import com.api.salvest.constant.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 /**
  * @author Salman aka theFreakingMind
- * @date 07/09/23
+ * @date 08/09/23
  */
-@Document("user")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
-public class User {
+@Document("tax_regime")
+public class TaxModel {
 
    @Id
    private String id;
 
-   private String userReference;
+   private String accountReference;
 
-   private String username;
+   private Double taxCalculated;
 
-   private String password;
-
-   @DBRef
-   private List<Roles> roles;
-
-   private UserStatus status;
-
-   private boolean isEnabled;
-
+   private LocalDateTime lastUpdated;
+   private LocalDateTime created;
 }

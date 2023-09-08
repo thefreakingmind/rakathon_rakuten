@@ -1,7 +1,16 @@
 spring:
+  security:
+    user:
+      name: admin
+      password: admin
+      roles: ADMIN
   data:
     mongodb:
       uri: mongodb+srv://thefreakingsal:rakathoniscool@rakathon.ckbgep9.mongodb.net/salvestDB?retryWrites=true&w=majority
+
+openAI:
+  api:
+    key: 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
 
 server:
   port: '8099'

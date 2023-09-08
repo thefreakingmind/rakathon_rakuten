@@ -1,6 +1,5 @@
 package com.api.salvest.model;
 
-import com.api.salvest.constant.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,29 +12,23 @@ import java.util.List;
 
 /**
  * @author Salman aka theFreakingMind
- * @date 07/09/23
+ * @date 08/09/23
  */
-@Document("user")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
-public class User {
+@Document("account")
+public class Account {
 
    @Id
    private String id;
-
-   private String userReference;
-
-   private String username;
-
-   private String password;
-
+   private String accountReference;
    @DBRef
-   private List<Roles> roles;
+   private List<Payments> paymemts;
+   private Double totalAmountRecieved;
+   private Double totalAmountPending;
+   private Double totalAmountDebitted;
 
-   private UserStatus status;
-
-   private boolean isEnabled;
 
 }

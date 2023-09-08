@@ -1,41 +1,37 @@
 package com.api.salvest.model;
 
-import com.api.salvest.constant.UserStatus;
+import com.api.salvest.constant.InstrumentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.List;
 
 /**
  * @author Salman aka theFreakingMind
- * @date 07/09/23
+ * @date 08/09/23
  */
-@Document("user")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
-public class User {
+@Document("payments")
+public class Payments {
 
    @Id
    private String id;
 
-   private String userReference;
+   private String paymentId;
 
-   private String username;
+   private String accountReference;
 
-   private String password;
+   private String paymentExternalId;
 
-   @DBRef
-   private List<Roles> roles;
+   private String source;
 
-   private UserStatus status;
+   private InstrumentType instrumentType;
 
-   private boolean isEnabled;
+   private Double paymentAmount;
 
 }

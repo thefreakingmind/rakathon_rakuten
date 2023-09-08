@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      username: sal123
+      database: salvesthackathonmongodb
+      password: sal
+      port: '27017'
+      host: localhost
+server:
+  port: '8099'

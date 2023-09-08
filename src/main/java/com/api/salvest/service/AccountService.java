@@ -17,6 +17,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -58,7 +59,6 @@ public class AccountService {
       Account account = accountRepository.findAccountByAccountReferenceAfter(bypaymentId.get().getAccountReference());
       account.setTotalAmountDebitted(account.getTotalAmountPending());
       return accountRepository.save(account);
-
    }
 
    private void processPayments(Payments payments) {
@@ -70,8 +70,23 @@ public class AccountService {
    }
 
    private void processGeneralPayment(Payments payments) {
+      String paymentId = payments.getPaymentId();
+
 
    }
+
+   /**
+    * Get the Response from Open AI and process the Logic
+    * to recommend the investment methods.
+    * @param map
+    * @return
+    */
+//   public String processOpenAIData(Map<String, Object> map){
+//      for(Map.Entry<String, Object> data: map.entrySet()){
+//         if(data.getKey()=="")
+//      }
+//
+//   }
 
    /**
     * Calculate Tax at the end of the payment. 

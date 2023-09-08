@@ -39,7 +39,8 @@ public class SpringCentralConfiguration {
       httpSecurity
               .authorizeRequests()
               .antMatchers("/test").hasAuthority("ADMIN")
-              .antMatchers("/api/v1/model/predict")
+              .antMatchers("/api/v1/model/predict").hasAuthority("ADMIN")
+              .antMatchers("/home")
               .permitAll()
               .anyRequest().authenticated();
       return httpSecurity.build();

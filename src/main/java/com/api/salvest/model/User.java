@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Salman aka theFreakingMind
@@ -31,8 +32,10 @@ public class User {
 
    private String password;
 
+   private String passwordConfirm;
+
    @DBRef
-   private List<Roles> roles;
+   private Set<Roles> roles;
 
    private UserStatus status;
 

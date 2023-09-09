@@ -1,11 +1,14 @@
 package com.api.salvest.utils;
 
+import com.api.salvest.dto.Choice;
 import com.paytm.pg.merchant.PaytmChecksum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 /**
  * @author Salman aka theFreakingMind
@@ -24,4 +27,19 @@ public class PaytmHelper {
       return paytmChecksum;
 
    }
+
+   public List<String> processChoices(List<Choice> choices) {
+      List<String> collect = choices
+              .stream()
+              .map(this::processString)
+              .collect(Collectors.toList());
+      return collect;
+   }
+
+   private String processString(Choice choice) {
+      return choice
+              .getMessage()
+              .getContent();
+   }
+
 }

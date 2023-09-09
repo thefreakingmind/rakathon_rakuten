@@ -3,14 +3,19 @@ package com.api.salvest.service;
 import com.api.salvest.dao.AccountRepository;
 import com.api.salvest.dao.PaymentRepository;
 import com.api.salvest.dao.TaxRepository;
+import com.api.salvest.dao.UserRepository;
 import com.api.salvest.dto.AccountDTO;
 import com.api.salvest.model.Account;
 import com.api.salvest.model.Payments;
 import com.api.salvest.model.TaxModel;
+import com.api.salvest.model.User;
 import com.api.salvest.utils.AccountHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -19,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Salman aka theFreakingMind
@@ -33,6 +39,7 @@ public class AccountService {
    private final AccountHelper accountHelper;
    private final PaymentRepository paymentRepository;
    private final TaxRepository taxRepository;
+   private final UserRepository userRepository;
 
    public AccountDTO createAccount(AccountDTO accountDTO){
       Account account = new Account();
@@ -41,11 +48,18 @@ public class AccountService {
       return accountHelper.processBuilder(account);
    }
 
-   public List<Payments> getAllPaymentsForAccount(String userId){
-      String sessionId = RequestContextHolder.getRequestAttributes().getSessionId();
-      Account accountByAccountReferenceAfter = accountRepository.findAccountByAccountReferenceAfter(sessionId);
-      return accountByAccountReferenceAfter.getPaymemts();
 
+
+   public List<AccountDTO> getAllPaymentsForAccount(String userId){
+      String sessionId = RequestContextHolder.getRequestAttributes(  ).getSessionId();
+      List<Account> accountByAccountReferenceAfter = accountRepository.findAllByAccountReference(sessionId);
+      if(accountByAccountReferenceAfter.isEmpty()){
+         throw new RestClientException("Payments are not found for this account");
+      }
+      return accountByAccountReferenceAfter
+              .stream()
+              .map(accountHelper::processBuilder)
+              .collect(Collectors.toList());
 
    }
    
@@ -56,7 +70,7 @@ public class AccountService {
       }
       Payments pay = bypaymentId.get();
       processPayments(pay);
-      Account account = accountRepository.findAccountByAccountReferenceAfter(bypaymentId.get().getAccountReference());
+      Account account = accountRepository.findAccountByAccountReference(bypaymentId.get().getAccountReference());
       account.setTotalAmountDebitted(account.getTotalAmountPending());
       return accountRepository.save(account);
    }
@@ -74,24 +88,6 @@ public class AccountService {
 
 
    }
-
-   /**
-    * Get the Response from Open AI and process the Logic
-    * to recommend the investment methods.
-    * @param map
-    * @return
-    */
-//   public String processOpenAIData(Map<String, Object> map){
-//      for(Map.Entry<String, Object> data: map.entrySet()){
-//         if(data.getKey()=="")
-//      }
-//
-//   }
-
-   /**
-    * Calculate Tax at the end of the payment. 
-    * @param payments
-    */
    private TaxModel processAmountForTax(Payments payments) {
       Optional<TaxModel> byAccountReference = Optional.ofNullable(taxRepository.findByAccountReference(payments.getAccountReference()));
       if(byAccountReference.isPresent()){
@@ -110,5 +106,33 @@ public class AccountService {
       }
    }
 
+   public Account getAccount(String Id) {
+      return accountRepository.findAccountByAccountReference(Id);
+   }
 
+   public List<Payments> getAllPaymentForUser(){
+      User user = getUser();
+      List<Account> allByAccountReference = accountRepository.findAllByAccountReference(user.getUserReference());
+      List<List<Payments>> collect = allByAccountReference
+              .stream()
+              .map(x -> x.getPaymemts())
+              .collect(Collectors.toList());
+      List<Payments> paymentsList = collect
+              .stream()
+              .flatMap(List::stream)
+              .collect(Collectors.toList());
+      return paymentsList;
+   }
+
+   private User getUser() {
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+      User byUsername = userRepository.findByUsername(userDetails.getUsername());
+      return byUsername;
+   }
+
+
+   public List<Payments> getAllPayments() {
+      return paymentRepository.findAll();
+   }
 }

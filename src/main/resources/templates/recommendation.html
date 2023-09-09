@@ -38,50 +38,45 @@
         </ul>
     </div>
 </nav>
-<!-- Main Content -->
-<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-    <!-- Add the two boxes for total amount and amount debited -->
+<!-- Sidebar with a box -->
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-6">
-            <div class="alert alert-info" role="alert">
-                <span id="totalAmount" th:text="${amount.totalAmountRecieved}"></span>
+        <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <div class="position-sticky">
+                <div id="sidebar-card">
+                    <h5>Sidebar Title</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                Payments
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                Reports
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="alert alert-warning" role="alert">
-                <span id="totalAmount" th:text="${amount.totalAmountDebitted}"></span>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <a href="/payment" class="btn btn-secondary btn-block">Make a Payment</a>
-        </div>
-        <div class="col-md-6">
-            <a href="/send-money" class="btn btn-secondary btn-block">Send Money</a>
-        </div>
-    </div>
+        </nav>
 
-        <!-- Main Content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <h1 class="mt-4">Payment Dashboard</h1>
             <table class="table">
                 <thead>
                 <tr>
-                    <th scope="col">Payment Id</th>
-                    <th scope="col">Account Reference</th>
-                    <th scope="col">Payment Amount</th>
-                    <th scope="col">Payment Instrument</th>
-                    <th scope="col">Payment Source</th>
-                    <th scope="col"></th>
+                    <th>Recommendation Engine</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="account : ${accountData}">
-                    <td th:text="${account.paymentId}"></td>
-                    <td th:text="${account.accountReference}"></td>
-                    <td th:text="${account.paymentAmount}"></td>
-                    <td th:text="${account.instrumentType}"></td>
-                    <td th:text="${account.source}"></td>
+                <tr th:each="reco : ${recommendationString}">
+                    <td><span th:text="${reco}">Title</span></td>
                 </tr>
                 </tbody>
             </table>

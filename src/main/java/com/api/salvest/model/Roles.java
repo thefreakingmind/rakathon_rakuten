@@ -23,7 +23,6 @@ public class Roles {
 
    @Id
    private String id;
-   private String roleReference;
-   private UserRoles userRoles;
+   private String name;
 
 }
